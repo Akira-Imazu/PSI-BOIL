@@ -58,7 +58,7 @@ void VOF::set_iflag() {
   for(int k=0; k<nk()-1; k++){
     for_ij(i,j){
       if((phi[i][j][k]-phisurf)*(phi[i][j][k+1]-phisurf)<=0.0){
-	if(iflag[i][j][k  ]<-1000 || iflag[i][j][k+1]<-1000) {
+	      if(iflag[i][j][k  ]<-1000 || iflag[i][j][k+1]<-1000) {
           iflag[i][j][k] = iflag[i][j][k];
           iflag[i][j][k+1] = iflag[i][j][k+1];
         }else {
