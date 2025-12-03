@@ -32,7 +32,7 @@ void VOF::ib_norm(const Scalar & sca) {
     if(dom->ibody().fPppp(i,j,k)==0) ib_norm_cal(cc, i+1,j+1,k+1);
   }
 
-#if 1
+#if 0
   boil::plot->plot(sca,nx,ny,nz, 
               "ib_norm-dist-nx-ny-nz", time->current_step());
 #endif
