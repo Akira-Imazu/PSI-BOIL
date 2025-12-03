@@ -57,6 +57,7 @@ void VOF::set_iflag() {
   /* k-direction */
   for(int k=0; k<nk()-1; k++){
     for_ij(i,j){
+#if 1
       if((phi[i][j][k]-phisurf)*(phi[i][j][k+1]-phisurf)<=0.0){
 	      if(iflag[i][j][k  ]<-1000 || iflag[i][j][k+1]<-1000) {
           iflag[i][j][k] = iflag[i][j][k];
@@ -66,6 +67,12 @@ void VOF::set_iflag() {
           if(iflag[i][j][k+1]>-1000) iflag[i][j][k+1]=0;
         }
       }
+#else
+      if((phi[i][j][k]-phisurf)*(phi[i][j+1][k]-phisurf)<=0.0){
+        if(iflag[i][j][k  ]>-1000) iflag[i][j][k  ]=0;
+        if(iflag[i][j][k+1]>-1000) iflag[i][j][k+1]=0;
+      }
+#endif
     }
   }
   insert_bc_flag(iflag, false);
