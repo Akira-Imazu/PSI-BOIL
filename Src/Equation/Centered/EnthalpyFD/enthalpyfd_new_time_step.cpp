@@ -82,6 +82,7 @@ void EnthalpyFD::new_time_step(const Scalar * diff_eddy) {
     fold[i][j][k] += conv_ts.Nm1() * cold[i][j][k]; /* conv_ts.Nm1() = 1.5 */
 
   /* semi-laglangian scheme */
+  real sum_delete_sensible_conv = 0.0; //[W]
   for_ijk(i,j,k){
     if(dom->ibody().on(i,j,k)){
       real c;
@@ -94,11 +95,17 @@ void EnthalpyFD::new_time_step(const Scalar * diff_eddy) {
       // phase change
       if( ((*clr)[i][j][k]-clrsurf)*(clrold[i][j][k]-clrsurf) < 0.0){
         if( (phi[i][j][k]-tsat)*(t_new-tsat)<=0.0 ){
+          //if ((*clr)[i][j][k]<clrsurf) {
+            sum_delete_sensible_conv += cpl * (phi[i][j][k]-tsat) * (*clr)[i][j][k]*dV(i,j,k) / time->dt();
+          //}
           t_new = tsat;     /* crude code */
         }
       // phase does not change
       } else {
         if( (phi[i][j][k]-tsat)*(t_new-tsat)<0.0 ){
+          //if ((*clr)[i][j][k]<clrsurf) {
+            sum_delete_sensible_conv += cpl * (phi[i][j][k]-tsat) * (*clr)[i][j][k]*dV(i,j,k) / time->dt();
+          //}
           t_new = tsat;     /* crude code: Is this necesarry? */
         }
       }
@@ -113,6 +120,9 @@ void EnthalpyFD::new_time_step(const Scalar * diff_eddy) {
   }
   phi.bnd_update();
   phi.exchange();
+
+  boil::cart.sum_real(&sum_delete_sensible_conv);
+  boil::oout<<"delete_sensible_heat_conv:time= "<<time->current_time()<<" [s],dshc= "<<sum_delete_sensible_conv<<" [W]\n";
 
   /* store clrold */
   for_aijk(i,j,k){
