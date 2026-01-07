@@ -115,25 +115,26 @@ void EnthalpyFD::diff_matrix(real & am, real & ac, real & ap
       if((clc-0.5)*(clp-0.5)>=0){
         dxp = dxp * fdp;
       } else {
-	dxp1 = dxp * fdp;
+	      dxp1 = dxp * fdp;
         aflagp=0.0;
         tp = tsat;
       }
       if (aflagp==0){
-	if (clp<0.5) {
+	      if (clp<0.5) {
           lf = lambdal;
           dxp2 = clp * 2.0*(dxp-dxp1);
-	} else {
+	      } else {
           lf = lambdav;
           dxp2 = (1.0-clp) * 2.0*(dxp-dxp1);
         }
-	real R = dxp2/lf;
-	if (Ri>R) {
-	  std::cout<<"R:dz/lambdaf= "<<R<<"\n";
+	      real R = dxp2/lf;
+	      if (Ri>R) {
+	        std::cout<<"R:dz/lambdaf= "<<R<<" clc= "<<clc<<" clp= "<<clp<<"\n";
           std::cout<<"diff_matrix: need to be develop!!!\n";
           std::cout<<"solid-solid-liquid-interface.\n";
-	  exit(0);
-	}
+          std::cout<<"s-s-f-FVM: "<<i<<" "<<j<<" "<<k<<" "<<am-ac+ap<<"\n";
+	        exit(0);
+      	}
         /* FDM */
         am = lc*vol*2.0/(dxm*(dxm+dxp1));
         ac = lc*vol*2.0/(dxm*dxp1)
