@@ -35,7 +35,6 @@ void PhaseChange::m(const Scalar * diff_eddy) {
       real qv = -lv * (tzv[i][j][k]*nz[i][j][k]);
       real tw = (ls*dzf*tpr[i][j][k-1] + ll*dzs*tsat) / (ll*dzs + ls*dzf);
       real ql = ll/dzf * (tw-tsat);
-
       M[i][j][k] = (qv + ql) /latent;
     } else if (iflag[i][j][k] == 3) {
       real lv = lambdav;
