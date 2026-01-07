@@ -26,7 +26,11 @@ void Nucleation::plant_clr(std::vector<Site> & s, const int ns) {
             //} else {
             //  (*clr)[i][j][k]=1.0-std::min(1.0-(*clr)[i][j][k],cseed);
             //}
-            if (cseed < threshold_c) (*tpr)[i][j][k]=tsat; // 2024.01.09
+            if (cseed < threshold_c) {
+              nucl_vapor += clr->dV(i,j,k) * (*clr)[i][j][k];
+              dshn += fluid()->cp(1) * ((*tpr)[i][j][k]-tsat) * clr->dV(i,j,k) / time->dt(); //[W] 
+              (*tpr)[i][j][k]=tsat; // 2024.01.09
+            }
           }
         }
       }

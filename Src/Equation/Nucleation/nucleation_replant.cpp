@@ -17,6 +17,8 @@ void Nucleation::replant () {
   }
 
   real t_current = time->current_time();
+  dshn = 0.0; //delete sensible heat nucl
+  nucl_vapor= 0.0; 
 
   for(int ns=0; ns<size(); ns++){
 
@@ -207,7 +209,7 @@ void Nucleation::replant () {
                       <<ns<<" x "<<sites[ns].x()<<" y "<<sites[ns].y()<<"\n";
 
             /* plant color function */
-	    plant_clr(sites,ns);
+	          plant_clr(sites,ns);
             sites[ns].set_plant_clr_current(true);
             sites[ns].set_time_plant_clr(t_current);
 
@@ -323,6 +325,11 @@ void Nucleation::replant () {
 
   deactivate_sites();
 
+  boil::cart.sum_real(&dshn);
+  boil::cart.sum_real(&nucl_vapor);
+  boil::oout<<"nucl_vapor:time= "<<time->current_time()<<" [s],nucl_vapor= "<<nucl_vapor<<" [W]\n";
+  boil::oout<<"delete_sensible_heat_nucl:time= "<<time->current_time()<<" [s],dshn= "<<dshn<<" [W]\n";
+  
   boil::timer.stop("nucleation replant");
 }
 

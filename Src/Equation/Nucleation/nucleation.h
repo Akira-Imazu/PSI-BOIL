@@ -112,6 +112,8 @@ class Nucleation {
     bool below_threshold(const int i, const int j, const int k) const;
     bool below_threshold(const real c) const;
 
+    real dshn,nucl_vapor;
+
   protected:
     void set_range(std::vector<Site> & s);
     void vol_area(std::vector<Site> & s);
